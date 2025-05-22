@@ -1,0 +1,6 @@
+@ProjetoAula_HostAddress = http://localhost:5000/swagger
+
+GET {{ProjetoAula_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
