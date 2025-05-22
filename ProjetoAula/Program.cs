@@ -7,6 +7,7 @@ using ProjetoAula.Services.Entities;
 using ProjetoAula.Services.Interfaces;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -78,7 +79,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Akari Beauty API v1");
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Projeto Aula API v1");
         c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None);
         c.DisplayRequestDuration();
         c.EnableDeepLinking();
@@ -93,12 +94,21 @@ if (app.Environment.IsDevelopment())
             Swashbuckle.AspNetCore.SwaggerUI.SubmitMethod.Patch
         );
     });
+
+    var url = "http://localhost:8080/swagger/index.html"; // Ajuste a URL conforme necessário
+    Process.Start(new ProcessStartInfo
+    {
+        FileName = url,
+        UseShellExecute = true
+    });
 }
 else
 {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
+
+app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 app.UseRouting();

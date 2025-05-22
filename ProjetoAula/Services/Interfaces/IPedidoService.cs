@@ -1,6 +1,5 @@
-using System;
-using ProjetoAula.Objects.DTOs;
 using ProjetoAula.Objects.Models;
+using ProjetoAula.Services.Entities;
 
 namespace ProjetoAula.Services.Interfaces;
 

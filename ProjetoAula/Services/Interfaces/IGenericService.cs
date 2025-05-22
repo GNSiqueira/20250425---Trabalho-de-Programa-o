@@ -1,4 +1,4 @@
-namespace ProjetoAula.Services.Interfaces
+namespace ProjetoAula.Services.Entities
 {
     public interface IGenericService<T> where T : class
     {
