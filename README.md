@@ -32,13 +32,14 @@ Além disso, o sistema:
 
 ## 📐 Diagrama de Classes
 
-![Diagrama de Classe](/home/gabrielneto/Downloads/service.png)
+![Diagrama de Classe](https://github.com/user-attachments/assets/ed6bbbf7-2964-4480-9327-217e1b51be8c)
+
 
 ---
 
 ## 💾 Diagrama de Persistência
 
-![Diagrama de Persistência](/home/gabrielneto/Downloads/model.png)
+![Diagrama de Persistência](https://github.com/user-attachments/assets/c3864fc6-6359-42c4-a31a-6ea9840ac5fe)
 
 ### Entidades Principais
 
