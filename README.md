@@ -47,10 +47,7 @@ Além disso, o sistema:
   - `idPedido`
   - `valorPedido`
   - `statusPedido` (enum)
-- **Frete**
-  - `idFrete`
-  - `tipoFrete`
-  - `taxaFrete`
+
 - **Enums**
   - `StatusPedido`: AguardandoPagamento, Pago, Enviado, Cancelado
   - `TipoFrete`: Aéreo, Terrestre
