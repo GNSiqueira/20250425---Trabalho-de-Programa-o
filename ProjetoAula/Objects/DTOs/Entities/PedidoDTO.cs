@@ -5,8 +5,8 @@ namespace ProjetoAula.Objects.DTOs;
 
 public class PedidoDTO
 {
-    public int id {get; set;}
-    public float valorPedido {get; set;}
-    public StatusPedido statusPedido {get; set;}
-    public TipoFrete tipoFrete {get; set;}
+    public int IdPedido {get; set;}
+    public float ValorPedido {get; set;}
+    public StatusPedido StatusPedido {get; set;}
+    public TipoFrete TipoFrete {get; set;}
 }

@@ -38,9 +38,10 @@ builder.Services.AddCors(options =>
     options.AddPolicy("MyPolicy", policy =>
     {
         policy.WithOrigins("http://localhost:3000", "http://localhost:5173")
-              .AllowAnyMethod()
-              .AllowAnyHeader()
-              .AllowCredentials();
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                //.AllowCredentials()
+              ;
     });
 });
 #endregion
@@ -108,7 +109,7 @@ else
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 app.UseRouting();

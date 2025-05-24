@@ -5,5 +5,4 @@ public interface IPedidoState
     public void Pagar();
     public void Cancelar();
     public void Enviar();
-    public int GetEnum();
 }

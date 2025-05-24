@@ -22,7 +22,10 @@ namespace ProjetoAula.Data.Repositories
 
         public async Task<T> GetById(int id)
         {
-            return await _dbSet.FindAsync(id);
+            var pedido = await _dbSet.FindAsync(id);
+            if (pedido == null)
+                throw new KeyNotFoundException("Pedido nao encontrado");
+            return pedido;
         }
 
         public async Task Add(T entity)
@@ -31,30 +34,25 @@ namespace ProjetoAula.Data.Repositories
             await SaveChanges();
         }
 
-        public async Task Update(T entity)
+        public async Task Update(T entity, int id)
         {
-            // Recupera a chave primária (supondo que seja 'Id')
-            var entityId = _context.Entry(entity).Property("Id").CurrentValue;
+            var existente = await _dbSet.FindAsync(id);
+            if (existente == null)
+                throw new KeyNotFoundException("Pedido não encontrado.");
 
-            // Verifica se a entidade com o mesmo Id já está sendo rastreada
-            var trackedEntity = _context.ChangeTracker.Entries<T>()
-                .FirstOrDefault(e => e.Property("Id").CurrentValue.Equals(entityId));
+            _context.Entry(existente).CurrentValues.SetValues(entity);
 
-            // Se a entidade já estiver sendo rastreada, desanexa
-            if (trackedEntity != null)
-            {
-                _context.Entry(trackedEntity.Entity).State = EntityState.Detached;
-            }
-
-            // Anexa a nova entidade e marca como 'Modified'
-            _context.Entry(entity).State = EntityState.Modified;
-
-            // Salva as alterações no banco de dados
-            await SaveChanges();
+            var sucesso = await SaveChanges();
+            if (!sucesso)
+                throw new Exception("Erro ao salvar as alterações.");
         }
 
-        public async Task Remove(T entity)
+        public async Task Remove(int id)
         {
+            var entity = await _dbSet.FindAsync(id);
+            if (entity == null)
+                throw new ArgumentException("Pedido nao encontrado");
+
             _dbSet.Remove(entity);
             await SaveChanges();
         }

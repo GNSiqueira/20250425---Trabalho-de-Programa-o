@@ -1,7 +1,6 @@
-using ProjetoAula.Objects.Models;
 using ProjetoAula.Services.Interfaces;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ProjetoAula.Objects.DTOs;
 
 namespace ProjetoAula.Controllers
 {
@@ -16,28 +15,17 @@ namespace ProjetoAula.Controllers
             this._pedidoService = pedidoService;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
-        {
-            var pedidos = await _pedidoService.GetAll();
-            return Ok(pedidos);
-        }
-
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
-        {
-            var pedido = await _pedidoService.GetById(id);
-            if (pedido == null)
-                return NotFound("Pedido não encontrada");
-            return Ok(pedido);
-        }
-
+        # region Métodos CRUD
         [HttpPost]
-        public async Task<IActionResult> Post(Pedido pedido)
+        public async Task<IActionResult> Post(PedidoDTO pedido)
         {
             try
             {
                 await _pedidoService.Create(pedido);
+            }
+            catch (ArgumentException ex)
+            {
+                return StatusCode(401, ex.Message);
             }
             catch (Exception)
             {
@@ -46,18 +34,48 @@ namespace ProjetoAula.Controllers
             return Ok(pedido);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, Pedido pedido)
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var pedidos = await _pedidoService.GetAll();
+            return Ok(pedidos);
+        }
+
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetById(int id)
         {
             try
             {
-                await _pedidoService.Update(pedido, id);
+                var pedido = await _pedidoService.GetById(id);
+                return Ok(pedido);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Put(PedidoDTO pedido)
+        {
+            try
+            {
+                await _pedidoService.Update(pedido);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "Ocorreu um erro ao tentar atualizar os dados da pedido: " + ex.Message);
+                return StatusCode(500, $"Erro interno: {ex.Message}");
             }
-            return Ok(pedido);
+            return Ok("Pedido atualizado com sucesso.");
         }
 
         [HttpDelete("{id}")]
@@ -67,11 +85,92 @@ namespace ProjetoAula.Controllers
             {
                 await _pedidoService.Remove(id);
             }
+            catch (ArgumentException ex)
+            {
+                return StatusCode(401, ex.Message);
+            }
             catch (Exception)
             {
                 return StatusCode(500, "Ocorreu um erro ao tentar remover a pedido");
             }
             return Ok("Pedido removida com sucesso");
         }
+        #endregion
+
+        # region State
+        [HttpPatch("{id:int}/pagar")]
+        public async Task<IActionResult> Pagar(int id)
+        {
+            try
+            {
+                await _pedidoService.Pagar(id);
+            }
+            catch (ArgumentException ex)
+            {
+                return StatusCode(401, ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Ocorreu um erro ao tentar pagar a pedido");
+            }
+            return Ok("Pedido pago com sucesso");
+        }
+
+        [HttpPatch("{id:int}/enviar")]
+        public async Task<IActionResult> Enviar(int id)
+        {
+            try
+            {
+                await _pedidoService.Enviar(id);
+            }
+            catch (ArgumentException ex)
+            {
+                return StatusCode(401, ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Ocorreu um erro ao tentar enviar a pedido");
+            }
+            return Ok("Pedido enviado com sucesso");
+        }
+
+        [HttpPatch("{id:int}/cancelar")]
+        public async Task<IActionResult> Cancelar(int id)
+        {
+            try
+            {
+                await _pedidoService.Cancelar(id);
+            }
+            catch (ArgumentException ex)
+            {
+                return StatusCode(401, ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Ocorreu um erro ao tentar cancelar a pedido");
+            }
+            return Ok("Pedido cancelado com sucesso");
+        }
+        #endregion
+
+        #region Template
+        [HttpGet("{id:int}/frete")]
+        public async Task<IActionResult> GetInfoFrete(int id)
+        {
+            try
+            {
+                var frete = await _pedidoService.GetInfoFrete(id);
+                return Ok(frete);
+            }
+            catch (ArgumentException ex)
+            {
+                return StatusCode(401, ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Ocorreu um erro ao tentar enviar a pedido");
+            }
+        }
+        #endregion
     }
 }
